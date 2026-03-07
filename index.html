@@ -1583,7 +1583,7 @@ async function loadDashboard(user) {
         planEl.textContent = planLabel + ' · ' + roleLabel
       }
       const tools = (profile.active_tools && profile.active_tools.length)
-        ? profile.active_tools : ['ReplyAI', 'EmberAI']
+        ? profile.active_tools : ['ReplyAI']
       updateToolsCount(tools.length)
       renderActiveToolsPanel(tools)
       renderActivityFeed(profile.created_at)
@@ -2045,7 +2045,7 @@ async function populateMyTools() {
   const { data: { session } } = await sb.auth.getSession()
   if (!session) return
   const { data: profile } = await sb.from('profiles').select('active_tools').eq('id', session.user.id).single()
-  const tools = (profile?.active_tools && profile.active_tools.length) ? profile.active_tools : ['ReplyAI', 'EmberAI']
+  const tools = (profile?.active_tools && profile.active_tools.length) ? profile.active_tools : ['ReplyAI']
   if (!tools.length) {
     grid.innerHTML = '<div style="color:var(--white-muted);font-size:13px;padding:20px 0;">No tools yet. <span onclick="scrollToDiscover()" style="color:var(--blue-bright);cursor:pointer;">Browse tools →</span></div>'
     return
