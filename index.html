@@ -1,0 +1,2011 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Synex — The AI Ecosystem</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --black: #000000;
+  --surface: #0a0a0a;
+  --surface2: #111111;
+  --surface3: #161616;
+  --surface4: #1c1c1c;
+  --blue: #3B82F6;
+  --blue-bright: #60A5FA;
+  --blue-dim: #1d4ed8;
+  --blue-glow: rgba(59,130,246,0.3);
+  --blue-glow-strong: rgba(59,130,246,0.5);
+  --white: #ffffff;
+  --white-dim: rgba(255,255,255,0.85);
+  --white-muted: rgba(255,255,255,0.45);
+  --white-faint: rgba(255,255,255,0.08);
+  --neo-shadow-light: rgba(255,255,255,0.04);
+  --neo-shadow-dark: rgba(0,0,0,0.9);
+  --border: rgba(255,255,255,0.06);
+  --border-bright: rgba(59,130,246,0.4);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--black);
+  color: var(--white);
+  overflow-x: hidden;
+}
+
+/* ─── NEOMORPHIC UTILITIES ─────────────────────────────── */
+.neo {
+  background: var(--surface2);
+  box-shadow:
+    6px 6px 16px var(--neo-shadow-dark),
+    -2px -2px 8px var(--neo-shadow-light),
+    inset 0 1px 0 rgba(255,255,255,0.05);
+  border: 1px solid var(--border);
+}
+
+.neo-deep {
+  background: var(--surface);
+  box-shadow:
+    8px 8px 24px #000000,
+    -2px -2px 10px rgba(255,255,255,0.03),
+    inset 0 0 0 1px rgba(255,255,255,0.04);
+}
+
+.neo-inset {
+  background: var(--black);
+  box-shadow:
+    inset 4px 4px 12px #000,
+    inset -2px -2px 6px rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.04);
+}
+
+.neo-blue {
+  background: linear-gradient(135deg, #1e3a6e 0%, #1d4ed8 100%);
+  box-shadow:
+    0 0 30px var(--blue-glow),
+    6px 6px 16px rgba(0,0,0,0.8),
+    -1px -1px 6px rgba(255,255,255,0.05),
+    inset 0 1px 0 rgba(255,255,255,0.15);
+  border: 1px solid rgba(59,130,246,0.3);
+}
+
+/* ─── SCROLLBAR ────────────────────────────────────────── */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: #000; }
+::-webkit-scrollbar-thumb { background: #222; border-radius: 2px; }
+
+/* ─── PAGE MANAGEMENT ──────────────────────────────────── */
+.page { display: none; }
+.page.active { display: block; }
+
+/* ═══════════════════════════════════════════════════════
+   LANDING PAGE
+════════════════════════════════════════════════════════ */
+
+/* NAV */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 20px 60px;
+  background: rgba(0,0,0,0.7);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+}
+
+.nav-logo {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800; font-size: 22px; letter-spacing: -0.5px;
+  color: var(--white);
+}
+
+.nav-logo span { color: var(--blue); }
+
+.nav-links { display: flex; gap: 36px; }
+.nav-links a {
+  color: var(--white-muted); text-decoration: none;
+  font-size: 14px; font-weight: 500; letter-spacing: 0.2px;
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--white); }
+
+.nav-cta {
+  display: flex; gap: 12px; align-items: center;
+}
+
+.btn-ghost {
+  padding: 9px 22px; border-radius: 10px;
+  border: 1px solid var(--border-bright);
+  color: var(--blue-bright); background: transparent;
+  font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500;
+  cursor: pointer; transition: all 0.2s;
+}
+.btn-ghost:hover { background: rgba(59,130,246,0.1); }
+
+.btn-primary {
+  padding: 9px 22px; border-radius: 10px; border: none;
+  background: var(--blue); color: white;
+  font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600;
+  cursor: pointer; transition: all 0.2s;
+  box-shadow: 0 0 20px var(--blue-glow), 0 4px 12px rgba(0,0,0,0.4);
+}
+.btn-primary:hover {
+  background: var(--blue-bright);
+  box-shadow: 0 0 30px var(--blue-glow-strong), 0 4px 16px rgba(0,0,0,0.5);
+  transform: translateY(-1px);
+}
+
+/* HERO */
+.hero {
+  min-height: 100vh;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-align: center;
+  padding: 120px 40px 80px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-bg {
+  position: absolute; inset: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 0%, rgba(59,130,246,0.12) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 40% at 20% 80%, rgba(59,130,246,0.06) 0%, transparent 50%),
+    radial-gradient(ellipse 40% 40% at 80% 80%, rgba(59,130,246,0.06) 0%, transparent 50%);
+}
+
+.hero-grid {
+  position: absolute; inset: 0; pointer-events: none; opacity: 0.03;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 7px 16px; border-radius: 999px; margin-bottom: 32px;
+  background: rgba(59,130,246,0.1); border: 1px solid rgba(59,130,246,0.3);
+  font-size: 12px; font-weight: 600; color: var(--blue-bright);
+  letter-spacing: 1.5px; text-transform: uppercase;
+  animation: fadeUp 0.6s ease both;
+}
+
+.hero-badge-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--blue); animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.4); }
+}
+
+.hero h1 {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(52px, 8vw, 96px);
+  font-weight: 800; line-height: 0.95;
+  letter-spacing: -3px;
+  color: var(--white);
+  max-width: 900px;
+  animation: fadeUp 0.7s 0.1s ease both;
+}
+
+.hero h1 .blue { color: var(--blue); }
+.hero h1 .dim { color: var(--white-muted); }
+
+.hero-sub {
+  margin-top: 28px;
+  font-size: 18px; font-weight: 300; color: var(--white-muted);
+  max-width: 500px; line-height: 1.7;
+  animation: fadeUp 0.7s 0.2s ease both;
+}
+
+.hero-actions {
+  margin-top: 44px; display: flex; gap: 14px; justify-content: center;
+  animation: fadeUp 0.7s 0.3s ease both;
+}
+
+.btn-large {
+  padding: 16px 36px; border-radius: 14px; border: none;
+  background: var(--blue); color: white;
+  font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 600;
+  cursor: pointer; transition: all 0.25s;
+  box-shadow: 0 0 40px var(--blue-glow), 0 8px 24px rgba(0,0,0,0.5);
+}
+.btn-large:hover {
+  background: var(--blue-bright); transform: translateY(-2px);
+  box-shadow: 0 0 60px var(--blue-glow-strong), 0 12px 28px rgba(0,0,0,0.6);
+}
+
+.btn-large-ghost {
+  padding: 16px 36px; border-radius: 14px;
+  border: 1px solid var(--border-bright);
+  background: transparent; color: var(--white-dim);
+  font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 500;
+  cursor: pointer; transition: all 0.25s;
+}
+.btn-large-ghost:hover { background: var(--white-faint); }
+
+.hero-stats {
+  margin-top: 64px; display: flex; gap: 48px; justify-content: center;
+  animation: fadeUp 0.7s 0.4s ease both;
+}
+
+.stat {
+  text-align: center;
+}
+
+.stat-num {
+  font-family: 'Syne', sans-serif; font-size: 32px; font-weight: 800;
+  color: var(--white); letter-spacing: -1px;
+}
+
+.stat-num span { color: var(--blue); }
+
+.stat-label {
+  font-size: 12px; color: var(--white-muted); margin-top: 4px;
+  text-transform: uppercase; letter-spacing: 1px; font-weight: 500;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* CATEGORIES SECTION */
+.section {
+  padding: 100px 60px;
+  max-width: 1200px; margin: 0 auto;
+}
+
+.section-label {
+  font-size: 11px; font-weight: 700; color: var(--blue);
+  text-transform: uppercase; letter-spacing: 3px; margin-bottom: 16px;
+}
+
+.section-title {
+  font-family: 'Syne', sans-serif; font-size: clamp(32px, 4vw, 52px);
+  font-weight: 800; letter-spacing: -1.5px; line-height: 1.05;
+  margin-bottom: 16px;
+}
+
+.section-sub {
+  font-size: 16px; color: var(--white-muted); max-width: 480px; line-height: 1.7;
+  margin-bottom: 56px;
+}
+
+.categories-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;
+}
+
+.category-card {
+  border-radius: 20px; padding: 32px 28px;
+  position: relative; overflow: hidden;
+  cursor: pointer; transition: all 0.3s;
+}
+
+.category-card.active-cat {
+  background: var(--surface2);
+  box-shadow:
+    8px 8px 24px #000,
+    -2px -2px 8px rgba(255,255,255,0.04),
+    inset 0 1px 0 rgba(255,255,255,0.06),
+    0 0 40px rgba(59,130,246,0.08);
+  border: 1px solid rgba(59,130,246,0.2);
+}
+
+.category-card.coming-soon {
+  background: var(--surface);
+  box-shadow: 4px 4px 16px #000, inset 0 1px 0 rgba(255,255,255,0.02);
+  border: 1px solid var(--border);
+  opacity: 0.6;
+}
+
+.category-card:hover:not(.coming-soon) { transform: translateY(-4px); }
+
+.category-icon {
+  width: 48px; height: 48px; border-radius: 12px; margin-bottom: 20px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px;
+  background: var(--surface3);
+  box-shadow: inset 2px 2px 6px #000, inset -1px -1px 4px rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+}
+
+.category-card.active-cat .category-icon {
+  background: rgba(59,130,246,0.15);
+  border: 1px solid rgba(59,130,246,0.3);
+  box-shadow: 0 0 16px rgba(59,130,246,0.2), inset 2px 2px 6px rgba(0,0,0,0.5);
+}
+
+.category-name {
+  font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.category-desc { font-size: 13px; color: var(--white-muted); line-height: 1.6; margin-bottom: 16px; }
+
+.category-tools {
+  font-size: 11px; color: var(--blue-bright); font-weight: 600;
+  text-transform: uppercase; letter-spacing: 1px;
+}
+
+.coming-badge {
+  font-size: 10px; color: var(--white-muted); font-weight: 600;
+  text-transform: uppercase; letter-spacing: 1.5px;
+  padding: 4px 10px; border-radius: 999px;
+  background: rgba(255,255,255,0.05); border: 1px solid var(--border);
+  display: inline-block; margin-top: 12px;
+}
+
+/* TOOLS SHOWCASE */
+.tools-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+}
+
+.tool-card {
+  border-radius: 16px; padding: 28px;
+  background: var(--surface2);
+  box-shadow: 6px 6px 18px #000, -1px -1px 6px rgba(255,255,255,0.03), inset 0 1px 0 rgba(255,255,255,0.05);
+  border: 1px solid var(--border);
+  transition: all 0.3s; cursor: pointer;
+  position: relative; overflow: hidden;
+}
+
+.tool-card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(59,130,246,0.4), transparent);
+  opacity: 0; transition: opacity 0.3s;
+}
+
+.tool-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 8px 8px 28px #000, -1px -1px 8px rgba(255,255,255,0.04), 0 0 30px rgba(59,130,246,0.08);
+  border-color: rgba(59,130,246,0.25);
+}
+
+.tool-card:hover::before { opacity: 1; }
+
+.tool-status {
+  font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px;
+  padding: 4px 10px; border-radius: 999px; display: inline-block; margin-bottom: 16px;
+}
+
+.status-live { background: rgba(16,185,129,0.15); color: #34d399; border: 1px solid rgba(16,185,129,0.3); }
+.status-wip { background: rgba(245,158,11,0.15); color: #fbbf24; border: 1px solid rgba(245,158,11,0.3); }
+.status-soon { background: rgba(255,255,255,0.05); color: var(--white-muted); border: 1px solid var(--border); }
+
+.tool-name {
+  font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 700;
+  margin-bottom: 8px; letter-spacing: -0.3px;
+}
+
+.tool-name span { color: var(--blue); }
+
+.tool-desc { font-size: 13px; color: var(--white-muted); line-height: 1.65; }
+
+.tool-arrow {
+  position: absolute; bottom: 24px; right: 24px;
+  width: 32px; height: 32px; border-radius: 8px;
+  background: var(--surface3); border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; opacity: 0; transition: all 0.2s;
+  box-shadow: inset 2px 2px 6px #000;
+}
+
+.tool-card:hover .tool-arrow { opacity: 1; }
+
+/* FEATURE STRIP */
+.feature-strip {
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 40px 60px;
+  background: var(--surface);
+  display: flex; justify-content: center; gap: 80px;
+}
+
+.feature-item {
+  display: flex; align-items: center; gap: 14px;
+}
+
+.feature-icon {
+  width: 40px; height: 40px; border-radius: 10px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center; font-size: 18px;
+  background: var(--surface2);
+  box-shadow: 3px 3px 10px #000, inset 0 1px 0 rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+}
+
+.feature-text strong { font-size: 14px; font-weight: 600; color: var(--white); display: block; }
+.feature-text span { font-size: 12px; color: var(--white-muted); }
+
+/* FOOTER */
+footer {
+  padding: 40px 60px; border-top: 1px solid var(--border);
+  display: flex; justify-content: space-between; align-items: center;
+}
+
+.footer-logo { font-family: 'Syne', sans-serif; font-weight: 800; font-size: 18px; }
+.footer-logo span { color: var(--blue); }
+footer p { font-size: 13px; color: var(--white-muted); }
+
+/* ═══════════════════════════════════════════════════════
+   DASHBOARD
+════════════════════════════════════════════════════════ */
+
+.dashboard {
+  display: flex; height: 100vh; background: var(--black); overflow: hidden;
+}
+
+/* SIDEBAR */
+.sidebar {
+  width: 240px; flex-shrink: 0;
+  background: var(--surface);
+  box-shadow: 4px 0 24px rgba(0,0,0,0.8), inset -1px 0 0 rgba(255,255,255,0.04);
+  display: flex; flex-direction: column;
+  overflow-y: auto; padding: 24px 0;
+}
+
+.sidebar-logo {
+  padding: 0 24px 24px;
+  font-family: 'Syne', sans-serif; font-weight: 800; font-size: 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 20px;
+}
+.sidebar-logo span { color: var(--blue); }
+
+.sidebar-section-label {
+  padding: 0 24px 8px;
+  font-size: 10px; font-weight: 700; color: var(--white-muted);
+  text-transform: uppercase; letter-spacing: 2px;
+}
+
+.sidebar-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 10px 24px; cursor: pointer;
+  font-size: 13.5px; font-weight: 500; color: var(--white-muted);
+  transition: all 0.2s; position: relative;
+  border-radius: 0;
+}
+
+.sidebar-item:hover { color: var(--white); background: rgba(255,255,255,0.04); }
+
+.sidebar-item.active {
+  color: var(--white);
+  background: rgba(59,130,246,0.12);
+}
+
+.sidebar-item.active::before {
+  content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+  width: 3px; border-radius: 0 2px 2px 0;
+  background: var(--blue);
+  box-shadow: 0 0 10px var(--blue-glow);
+}
+
+.sidebar-item-icon { font-size: 16px; width: 20px; text-align: center; }
+
+.sidebar-divider {
+  height: 1px; background: var(--border); margin: 16px 24px;
+}
+
+.sidebar-category {
+  display: flex; align-items: center; gap: 10px;
+  padding: 9px 24px; cursor: pointer;
+  font-size: 13px; font-weight: 500; color: var(--white-muted);
+  transition: all 0.2s;
+}
+
+.sidebar-category:hover { color: var(--white); background: rgba(255,255,255,0.03); }
+.sidebar-category.cat-active { color: var(--blue-bright); }
+
+.cat-dot {
+  width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0;
+}
+
+.cat-dot.live { background: #34d399; box-shadow: 0 0 6px rgba(52,211,153,0.6); }
+.cat-dot.soon { background: var(--surface4); border: 1px solid var(--border); }
+
+.sidebar-bottom {
+  margin-top: auto; padding: 20px 24px 0;
+  border-top: 1px solid var(--border);
+}
+
+.user-pill {
+  display: flex; align-items: center; gap: 10px; padding: 10px 12px;
+  border-radius: 12px;
+  background: var(--surface2);
+  box-shadow: 3px 3px 10px #000, -1px -1px 4px rgba(255,255,255,0.03), inset 0 1px 0 rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+}
+
+.user-avatar {
+  width: 32px; height: 32px; border-radius: 8px; flex-shrink: 0;
+  background: linear-gradient(135deg, var(--blue-dim), var(--blue));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 700;
+  box-shadow: 0 0 12px var(--blue-glow);
+}
+
+.user-name { font-size: 13px; font-weight: 600; color: var(--white); }
+.user-plan { font-size: 11px; color: var(--blue-bright); }
+
+/* MAIN CONTENT */
+.main {
+  flex: 1; overflow-y: auto; padding: 32px 36px;
+  background: var(--black);
+  display: flex; flex-direction: column;
+}
+
+.main-header {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  margin-bottom: 32px;
+}
+
+.main-header h2 {
+  font-family: 'Syne', sans-serif; font-size: 26px; font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+.main-header p { font-size: 14px; color: var(--white-muted); margin-top: 4px; }
+
+.header-actions { display: flex; gap: 10px; align-items: center; }
+
+.btn-sm {
+  padding: 8px 18px; border-radius: 9px;
+  background: var(--blue); color: white; border: none;
+  font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600;
+  cursor: pointer; transition: all 0.2s;
+  box-shadow: 0 0 20px var(--blue-glow);
+}
+.btn-sm:hover { background: var(--blue-bright); transform: translateY(-1px); }
+
+.notif-btn {
+  width: 36px; height: 36px; border-radius: 10px;
+  background: var(--surface2);
+  box-shadow: 3px 3px 10px #000, -1px -1px 4px rgba(255,255,255,0.03), inset 0 1px 0 rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; font-size: 16px; position: relative;
+  transition: all 0.2s;
+}
+.notif-btn:hover { border-color: var(--border-bright); }
+
+.notif-dot {
+  position: absolute; top: 7px; right: 7px;
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--blue); border: 1.5px solid var(--black);
+  box-shadow: 0 0 8px var(--blue-glow);
+}
+
+/* SCORE CARDS */
+.score-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px; }
+
+.score-card {
+  border-radius: 16px; padding: 22px 20px;
+  background: var(--surface2);
+  box-shadow: 5px 5px 16px #000, -1px -1px 6px rgba(255,255,255,0.03), inset 0 1px 0 rgba(255,255,255,0.05);
+  border: 1px solid var(--border);
+  transition: all 0.25s;
+}
+
+.score-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 7px 7px 20px #000, -1px -1px 8px rgba(255,255,255,0.04), 0 0 20px rgba(59,130,246,0.06);
+}
+
+.score-card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 14px; }
+
+.score-label { font-size: 12px; color: var(--white-muted); font-weight: 500; }
+
+.score-badge {
+  font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 999px;
+  text-transform: uppercase; letter-spacing: 1px;
+}
+
+.badge-up { background: rgba(16,185,129,0.15); color: #34d399; }
+.badge-coming { background: rgba(255,255,255,0.05); color: var(--white-muted); border: 1px solid var(--border); }
+
+.score-number {
+  font-family: 'Syne', sans-serif; font-size: 32px; font-weight: 800;
+  letter-spacing: -1px; margin-bottom: 6px;
+}
+
+.score-sub { font-size: 11px; color: var(--white-muted); }
+
+.score-bar {
+  height: 4px; border-radius: 2px; margin-top: 14px;
+  background: var(--surface4);
+  box-shadow: inset 1px 1px 3px #000;
+}
+
+.score-fill {
+  height: 100%; border-radius: 2px;
+  background: linear-gradient(90deg, var(--blue-dim), var(--blue));
+  box-shadow: 0 0 8px var(--blue-glow);
+}
+
+/* MAIN GRID */
+.dash-grid { display: grid; grid-template-columns: 1fr 320px; gap: 20px; }
+
+/* TOOLS PANEL */
+.panel {
+  border-radius: 18px; padding: 24px;
+  background: var(--surface2);
+  box-shadow: 6px 6px 20px #000, -1px -1px 6px rgba(255,255,255,0.03), inset 0 1px 0 rgba(255,255,255,0.05);
+  border: 1px solid var(--border);
+  margin-bottom: 20px;
+}
+
+.panel-header {
+  display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;
+}
+
+.panel-title {
+  font-family: 'Syne', sans-serif; font-size: 16px; font-weight: 700; letter-spacing: -0.2px;
+}
+
+.panel-link { font-size: 12px; color: var(--blue-bright); cursor: pointer; font-weight: 500; transition: color 0.2s; }
+.panel-link:hover { color: var(--blue); }
+
+.active-tools { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+.active-tool-card {
+  border-radius: 12px; padding: 18px 16px;
+  background: var(--surface3);
+  box-shadow: 4px 4px 12px #000, -1px -1px 4px rgba(255,255,255,0.02), inset 0 1px 0 rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  transition: all 0.25s; cursor: pointer; position: relative; overflow: hidden;
+}
+
+.active-tool-card::after {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(59,130,246,0.3), transparent);
+  opacity: 0; transition: opacity 0.3s;
+}
+
+.active-tool-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(59,130,246,0.2);
+  box-shadow: 5px 5px 16px #000, 0 0 20px rgba(59,130,246,0.06);
+}
+.active-tool-card:hover::after { opacity: 1; }
+
+.atc-icon {
+  width: 36px; height: 36px; border-radius: 9px; margin-bottom: 12px;
+  display: flex; align-items: center; justify-content: center; font-size: 17px;
+  background: rgba(59,130,246,0.12); border: 1px solid rgba(59,130,246,0.2);
+  box-shadow: 0 0 12px rgba(59,130,246,0.15);
+}
+
+.atc-name { font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+.atc-name span { color: var(--blue); }
+.atc-meta { font-size: 11px; color: var(--white-muted); }
+
+.atc-usage {
+  margin-top: 12px; height: 3px; border-radius: 2px;
+  background: var(--surface4);
+}
+.atc-usage-fill {
+  height: 100%; border-radius: 2px;
+  background: linear-gradient(90deg, var(--blue-dim), var(--blue));
+}
+
+/* DISCOVER PANEL */
+.discover-item {
+  display: flex; align-items: center; gap: 14px; padding: 12px 0;
+  border-bottom: 1px solid var(--border); cursor: pointer;
+  transition: all 0.2s;
+}
+.discover-item:last-child { border-bottom: none; }
+.discover-item:hover { padding-left: 6px; }
+
+.discover-icon {
+  width: 36px; height: 36px; border-radius: 9px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center; font-size: 16px;
+  background: var(--surface3); border: 1px solid var(--border);
+  box-shadow: inset 2px 2px 6px #000;
+}
+
+.discover-info { flex: 1; }
+.discover-name { font-size: 13px; font-weight: 600; color: var(--white); margin-bottom: 2px; }
+.discover-name span { color: var(--blue); }
+.discover-desc { font-size: 11px; color: var(--white-muted); }
+
+.discover-add {
+  width: 26px; height: 26px; border-radius: 6px; flex-shrink: 0;
+  background: var(--blue); border: none;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; color: white; cursor: pointer;
+  box-shadow: 0 0 12px var(--blue-glow);
+  transition: all 0.2s;
+}
+.discover-add:hover { background: var(--blue-bright); transform: scale(1.1); }
+
+/* RIGHT COLUMN */
+.right-col {}
+
+/* SYNEX SCORE */
+.synex-score-card {
+  border-radius: 18px; padding: 24px; margin-bottom: 20px;
+  background: var(--surface2);
+  box-shadow: 6px 6px 20px #000, -1px -1px 6px rgba(255,255,255,0.03), inset 0 1px 0 rgba(255,255,255,0.05);
+  border: 1px solid var(--border);
+}
+
+.score-ring-wrap {
+  display: flex; align-items: center; gap: 20px; margin: 16px 0;
+}
+
+.score-ring {
+  width: 72px; height: 72px; position: relative; flex-shrink: 0;
+}
+
+.score-ring svg { width: 72px; height: 72px; transform: rotate(-90deg); }
+.score-ring-bg { fill: none; stroke: var(--surface4); stroke-width: 5; }
+.score-ring-fill {
+  fill: none; stroke: var(--blue); stroke-width: 5;
+  stroke-dasharray: 188; stroke-dashoffset: 38;
+  stroke-linecap: round;
+  filter: drop-shadow(0 0 6px var(--blue));
+}
+
+.score-ring-label {
+  position: absolute; inset: 0; display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+}
+.score-ring-num { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 800; }
+.score-ring-txt { font-size: 9px; color: var(--white-muted); font-weight: 600; }
+
+.score-breakdown { flex: 1; }
+.breakdown-item { display: flex; justify-content: space-between; margin-bottom: 8px; }
+.breakdown-label { font-size: 12px; color: var(--white-muted); }
+.breakdown-val { font-size: 12px; font-weight: 600; color: var(--white); }
+.breakdown-bar { height: 3px; border-radius: 2px; background: var(--surface4); margin-bottom: 10px; }
+.breakdown-fill { height: 100%; border-radius: 2px; }
+.fill-blue { background: var(--blue); }
+.fill-green { background: #34d399; }
+.fill-yellow { background: #fbbf24; }
+
+/* ACTIVITY FEED */
+.activity-item {
+  display: flex; gap: 12px; padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+}
+.activity-item:last-child { border-bottom: none; }
+
+.activity-dot {
+  width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 5px;
+}
+
+.activity-text { font-size: 12.5px; color: var(--white-dim); line-height: 1.5; }
+.activity-text strong { color: var(--white); }
+.activity-time { font-size: 11px; color: var(--white-muted); margin-top: 3px; }
+
+/* WEEKLY DIGEST */
+.digest-card {
+  border-radius: 18px; padding: 24px;
+  background: linear-gradient(135deg, #0d1f42 0%, #111827 100%);
+  box-shadow: 6px 6px 20px #000, inset 0 1px 0 rgba(255,255,255,0.05);
+  border: 1px solid rgba(59,130,246,0.2);
+  margin-bottom: 20px;
+}
+
+.digest-teaser {
+  font-size: 13px; color: rgba(255,255,255,0.55); margin-bottom: 8px; font-style: italic;
+}
+.digest-title {
+  font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700;
+  margin-bottom: 4px; display: flex; align-items: center; gap: 8px;
+}
+
+.digest-sub { font-size: 12px; color: var(--white-muted); margin-bottom: 16px; }
+
+.digest-insight {
+  font-size: 13px; color: var(--white-dim); line-height: 1.7;
+  padding: 14px; border-radius: 10px;
+  background: rgba(0,0,0,0.3);
+  border: 1px solid rgba(59,130,246,0.15);
+  margin-bottom: 14px;
+}
+
+.digest-insight strong { color: var(--blue-bright); }
+
+.digest-btn {
+  width: 100%; padding: 11px; border-radius: 10px;
+  background: var(--blue); border: none; color: white;
+  font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600;
+  cursor: pointer; transition: all 0.2s;
+  box-shadow: 0 0 20px var(--blue-glow);
+}
+.digest-btn:hover { background: var(--blue-bright); }
+
+/* ─── NOTIFICATION BADGE ─── */
+.cat-pill {
+  font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 999px;
+  background: rgba(255,255,255,0.05); color: var(--white-muted);
+  border: 1px solid var(--border); margin-left: auto;
+}
+
+/* QUICK PROMPTS */
+.quick-prompt {
+  padding: 8px 14px; border-radius: 999px; cursor: pointer;
+  font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 500;
+  transition: all 0.2s; color: var(--white-muted);
+  background: var(--surface2); border: 1px solid var(--border);
+  box-shadow: 3px 3px 10px #000;
+}
+.quick-prompt:hover {
+  color: var(--white); border-color: var(--border-bright);
+  background: rgba(59,130,246,0.08);
+}
+
+/* CHAT BUBBLES */
+.msg-user {
+  display: flex; justify-content: flex-end;
+}
+.msg-user-bubble {
+  background: linear-gradient(135deg, #1d4ed8, #3B82F6);
+  border-radius: 14px 14px 0 14px; padding: 12px 16px; max-width: 75%;
+  font-size: 13.5px; color: white; line-height: 1.7;
+  box-shadow: 0 0 20px rgba(59,130,246,0.2), 4px 4px 14px #000;
+}
+.msg-claude {
+  display: flex; gap: 12px; align-items: flex-start;
+}
+.msg-claude-bubble {
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 0 14px 14px 14px; padding: 14px 18px; max-width: 75%;
+  font-size: 13.5px; color: var(--white-dim); line-height: 1.7;
+  box-shadow: 4px 4px 14px #000, inset 0 1px 0 rgba(255,255,255,0.04);
+}
+.msg-claude-icon {
+  width: 32px; height: 32px; border-radius: 8px; flex-shrink: 0;
+  background: rgba(59,130,246,0.15); border: 1px solid rgba(59,130,246,0.3);
+  display: flex; align-items: center; justify-content: center; font-size: 15px;
+}
+.typing-dot {
+  width: 7px; height: 7px; border-radius: 50%; background: var(--blue);
+  animation: typingPulse 1.2s infinite;
+  box-shadow: 0 0 6px var(--blue-glow);
+}
+.typing-dot:nth-child(2) { animation-delay: 0.2s; }
+.typing-dot:nth-child(3) { animation-delay: 0.4s; }
+@keyframes typingPulse {
+  0%, 100% { opacity: 0.3; transform: scale(0.8); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+
+/* RESPONSIVE NAV SCROLL */
+@media (max-width: 900px) {
+  .nav { padding: 16px 24px; }
+  .nav-links { display: none; }
+  .section { padding: 60px 24px; }
+  .categories-grid { grid-template-columns: 1fr 1fr; }
+  .tools-grid { grid-template-columns: 1fr; }
+  .feature-strip { flex-direction: column; gap: 24px; padding: 32px 24px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════ LANDING PAGE ═══════════════════════ -->
+<div id="landing" class="page active">
+
+  <nav class="nav">
+    <div class="nav-logo">Syne<span>x</span></div>
+    <div class="nav-links">
+      <a href="#">Products</a>
+      <a href="#">Categories</a>
+      <a href="#">Pricing</a>
+      <a href="#">Roadmap</a>
+    </div>
+    <div class="nav-cta">
+      <button class="btn-ghost" onclick="openAuth('signin')">Sign In</button>
+      <button class="btn-primary" onclick="openAuth('signup')">Get Early Access</button>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-grid"></div>
+
+    <div class="hero-badge">
+      <div class="hero-badge-dot"></div>
+      Now in Early Access
+    </div>
+
+    <h1>
+      Every AI tool<br>
+      your work <span class="blue">needs.</span><br>
+      <span class="dim">One ecosystem.</span>
+    </h1>
+
+    <p class="hero-sub">
+      Synex is the professional AI platform built around you — specialist tools across every category, unified under one powerful dashboard.
+    </p>
+
+    <div class="hero-actions">
+      <button class="btn-large" onclick="openAuth('signup')">Start Free Today</button>
+      <button class="btn-large-ghost" onclick="showTooltip(this, 'Demo coming soon')">Watch Demo →</button>
+    </div>
+
+    <div class="hero-stats">
+      <div class="stat">
+        <div class="stat-num">3<span>+</span></div>
+        <div class="stat-label">Tools Live</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">4<span>+</span></div>
+        <div class="stat-label">Categories</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">1</div>
+        <div class="stat-label">Login</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURE STRIP -->
+  <div class="feature-strip">
+    <div class="feature-item">
+      <div class="feature-icon">🔐</div>
+      <div class="feature-text">
+        <strong>One Login</strong>
+        <span>Access every tool across every category</span>
+      </div>
+    </div>
+    <div class="feature-item">
+      <div class="feature-icon">🧠</div>
+      <div class="feature-text">
+        <strong>Synex Memory</strong>
+        <span>Platform learns your preferences over time</span>
+      </div>
+    </div>
+    <div class="feature-item">
+      <div class="feature-icon">⚡</div>
+      <div class="feature-text">
+        <strong>Always Expanding</strong>
+        <span>New tools and categories shipped regularly</span>
+      </div>
+    </div>
+    <div class="feature-item">
+      <div class="feature-icon">📊</div>
+      <div class="feature-text">
+        <strong>Synex Score</strong>
+        <span>Unified performance insight across your tools</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- CATEGORIES -->
+  <div class="section">
+    <div class="section-label">The Ecosystem</div>
+    <h2 class="section-title">Every professional<br>category covered.</h2>
+    <p class="section-sub">Start with Business. Finance, Education, and Tech are coming — and they're only the beginning.</p>
+
+    <div class="categories-grid">
+      <div class="category-card active-cat">
+        <div class="category-icon">💼</div>
+        <div class="category-name">Business</div>
+        <div class="category-desc">AI tools for reviews, competitors, restaurants, and local growth.</div>
+        <div class="category-tools">3 tools live →</div>
+      </div>
+      <div class="category-card coming-soon">
+        <div class="category-icon">💰</div>
+        <div class="category-name">Finance</div>
+        <div class="category-desc">Bookkeeping, cash flow prediction, personal wealth, and audit tools.</div>
+        <div class="coming-badge">Coming Soon</div>
+      </div>
+      <div class="category-card coming-soon">
+        <div class="category-icon">🎓</div>
+        <div class="category-name">Education</div>
+        <div class="category-desc">Personalised tutoring, grading, study recall, and curriculum building.</div>
+        <div class="coming-badge">Coming Soon</div>
+      </div>
+      <div class="category-card coming-soon">
+        <div class="category-icon">💻</div>
+        <div class="category-name">Tech</div>
+        <div class="category-desc">Debugging, code review, documentation, and sprint planning tools.</div>
+        <div class="coming-badge">Coming Soon</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOOLS -->
+  <div class="section" style="padding-top:0">
+    <div class="section-label">Business Tools</div>
+    <h2 class="section-title">Built for serious<br>business owners.</h2>
+    <p class="section-sub">Deeply specialised tools that do one thing exceptionally well.</p>
+
+    <div class="tools-grid">
+      <div class="tool-card" onclick="openTool('ReplyAI')">
+        <div class="tool-status status-live">Live</div>
+        <div class="tool-name">Reply<span>AI</span></div>
+        <p class="tool-desc">Generates intelligent, on-brand responses to your Google and Yelp reviews. Turns review management from a chore into a growth channel.</p>
+        <div class="tool-arrow">→</div>
+      </div>
+      <div class="tool-name">Ember<span>AI</span></div>
+        <p class="tool-desc">The AI co-pilot for restaurant owners. Menu optimisation, customer insight, and operational intelligence in one place.</p>
+        <div class="tool-arrow">→</div>
+      </div>
+      <div class="tool-name">Rivalr<span>AI</span></div>
+        <p class="tool-desc">Deep competitor analysis that surfaces what your rivals are doing right, what they're missing, and exactly where you can win.</p>
+        <div class="tool-arrow">→</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">Syne<span>x</span></div>
+    <p>© 2026 Synex. Built by one person. Growing fast.</p>
+    <p style="font-size:12px;color:var(--white-muted)">Early Access — Free to start.</p>
+  </footer>
+
+</div>
+
+<!-- ═══════════════════════ DASHBOARD ═══════════════════════ -->
+<div id="dashboard" class="page">
+  <div class="dashboard">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sidebar-logo">Syne<span>x</span></div>
+
+      <div class="sidebar-section-label">Main</div>
+      <div class="sidebar-item active" id="nav-overview" onclick="showView('overview')">
+        <span class="sidebar-item-icon">⊞</span> Overview
+      </div>
+      <div class="sidebar-item" id="nav-mytools" onclick="showView('mytools')">
+        <span class="sidebar-item-icon">⚡</span> My Tools
+      </div>
+      <div class="sidebar-item" onclick="setSidebarActive(this);scrollToPanel('synex-score-panel')">
+        <span class="sidebar-item-icon">📊</span> Synex Score
+      </div>
+      <div class="sidebar-item" onclick="setSidebarActive(this);scrollToPanel('digest-panel')">
+        <span class="sidebar-item-icon">📋</span> Weekly Digest
+      </div>
+      <div class="sidebar-item" onclick="setSidebarActive(this);toggleNotifDropdown()">
+        <span class="sidebar-item-icon">🔔</span> Notifications
+        <span class="cat-pill" style="background:rgba(59,130,246,0.2);color:var(--blue-bright);border-color:rgba(59,130,246,0.3);">3</span>
+      </div>
+
+      <div class="sidebar-divider"></div>
+      <div class="sidebar-section-label">Categories</div>
+
+      <div class="sidebar-category cat-active">
+        <div class="cat-dot live"></div> Business
+        <span class="cat-pill" style="color:var(--blue-bright);background:rgba(59,130,246,0.1);border-color:rgba(59,130,246,0.2);">3</span>
+      </div>
+      <div class="sidebar-category">
+        <div class="cat-dot soon"></div> Finance
+        <span class="cat-pill">Soon</span>
+      </div>
+      <div class="sidebar-category">
+        <div class="cat-dot soon"></div> Education
+        <span class="cat-pill">Soon</span>
+      </div>
+      <div class="sidebar-category">
+        <div class="cat-dot soon"></div> Tech
+        <span class="cat-pill">Soon</span>
+      </div>
+
+      <div class="sidebar-divider"></div>
+      <div class="sidebar-item" id="nav-claude" onclick="showView('claude')">
+        <span class="sidebar-item-icon">🤖</span> Claude AI
+        <span class="cat-pill" style="background:rgba(59,130,246,0.2);color:var(--blue-bright);border-color:rgba(59,130,246,0.3);margin-left:auto;">Owner</span>
+      </div>
+      <div class="sidebar-item" id="nav-settings" onclick="showView('settings')">
+        <span class="sidebar-item-icon">⚙</span> Settings
+      </div>
+
+      <div class="sidebar-bottom">
+        <div class="user-pill">
+          <div class="user-avatar" id="dash-avatar">?</div>
+          <div>
+            <div class="user-name" id="dash-username">Loading...</div>
+            <div class="user-plan" id="dash-plan">Free · Business</div>
+          </div>
+        </div>
+        <div style="margin-top:12px;text-align:center;">
+          <span style="font-size:11px;color:var(--white-muted);cursor:pointer;" onclick="signOut()">← Sign Out</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main">
+      <div class="main-header">
+        <div>
+          <h2 id="dash-greeting">Good morning 👋</h2>
+          <p id="dash-date">Here's your Synex overview for today —</p>
+        </div>
+        <div class="header-actions">
+          <div class="notif-btn" onclick="toggleNotifDropdown()" id="notif-btn" style="position:relative;">🔔 <div class="notif-dot"></div>
+            <div id="notif-dropdown" style="display:none;position:absolute;top:44px;right:0;width:260px;background:#111;border:1px solid rgba(255,255,255,0.08);border-radius:14px;box-shadow:8px 8px 24px #000;padding:16px;z-index:200;text-align:left;">
+              <div style="font-family:'Syne',sans-serif;font-size:13px;font-weight:700;margin-bottom:12px;">Notifications</div>
+              <div style="font-size:12px;color:rgba(255,255,255,0.45);text-align:center;padding:12px 0;">No new notifications</div>
+            </div>
+          </div>
+          <button class="btn-sm" onclick="showView('mytools')">+ Add Tool</button>
+        </div>
+      </div>
+
+      <!-- SCORE CARDS ROW -->
+      <div class="score-row">
+        <div class="score-card">
+          <div class="score-card-top">
+            <div class="score-label">Business Score</div>
+            <div class="score-badge badge-up">+4pts</div>
+          </div>
+          <div class="score-number">79</div>
+          <div class="score-sub">Out of 100 · Good</div>
+          <div class="score-bar"><div class="score-fill" style="width:79%"></div></div>
+        </div>
+        <div class="score-card">
+          <div class="score-card-top">
+            <div class="score-label">Reviews Replied</div>
+            <div class="score-badge badge-up">↑ 12</div>
+          </div>
+          <div class="score-number">47</div>
+          <div class="score-sub">This month · via ReplyAI</div>
+          <div class="score-bar"><div class="score-fill" style="width:65%"></div></div>
+        </div>
+        <div class="score-card">
+          <div class="score-card-top">
+            <div class="score-label">Tools Active</div>
+            <div class="score-badge badge-up">Live</div>
+          </div>
+          <div class="score-number">2</div>
+          <div class="score-sub">of 3 Business tools</div>
+          <div class="score-bar"><div class="score-fill" style="width:66%"></div></div>
+        </div>
+        <div class="score-card">
+          <div class="score-card-top">
+            <div class="score-label">Finance Score</div>
+            <div class="score-badge badge-coming">Coming</div>
+          </div>
+          <div class="score-number" style="color:var(--white-muted)">—</div>
+          <div class="score-sub">Unlock with Finance tools</div>
+          <div class="score-bar"><div class="score-fill" style="width:0%"></div></div>
+        </div>
+      </div>
+
+      <!-- MAIN GRID -->
+      <div class="dash-grid">
+        <div class="left-col">
+          <!-- ACTIVE TOOLS -->
+          <div class="panel" id="active-tools-panel">
+            <div class="panel-header">
+              <div class="panel-title">Your Active Tools</div>
+              <div class="panel-link" onclick="showView('mytools')" title="Browse and manage tools">Manage →</div>
+            </div>
+            <div class="active-tools">
+              <div class="active-tool-card" onclick="openTool('ReplyAI')" title="Open ReplyAI">
+                <div class="atc-icon">⭐</div>
+                <div class="atc-name">Reply<span>AI</span></div>
+                <div class="atc-meta">47 replies this month</div>
+                <div class="atc-usage"><div class="atc-usage-fill" style="width:65%"></div></div>
+              </div>
+              <div class="atc-name">Ember<span>AI</span></div>
+                <div class="atc-meta">In setup · 2 tasks left</div>
+                <div class="atc-usage"><div class="atc-usage-fill" style="width:30%"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT COLUMN -->
+        <div class="right-col">
+
+          <!-- WEEKLY DIGEST -->
+          <div class="digest-card" id="digest-panel">
+            <div class="digest-title">📋 Weekly Digest</div>
+            <div class="digest-sub">Your business summary · w/c 17 Feb</div>
+            <div class="digest-teaser" id="digest-teaser">Your business summary is ready. Tap to read.</div>
+            <div class="digest-insight" id="digest-full" style="display:none;">
+              You replied to <strong>12 new reviews</strong> this week. Your average rating climbed from 4.1 to <strong>4.4 ★</strong>. ReplyAI flagged <strong>2 negative reviews</strong> needing personal attention.
+            </div>
+            <button class="digest-btn" onclick="toggleDigest(this)">Read Full Digest</button>
+          </div>
+
+          <!-- SYNEX SCORE BREAKDOWN -->
+          <div class="synex-score-card" id="synex-score-panel">
+            <div class="panel-header" style="margin-bottom:0">
+              <div class="panel-title">Synex Score</div>
+              <div class="panel-link" onclick="showTooltip(this, 'Score details coming soon')">Details →</div>
+            </div>
+            <div class="score-ring-wrap">
+              <div class="score-ring">
+                <svg viewBox="0 0 72 72">
+                  <circle class="score-ring-bg" cx="36" cy="36" r="30"/>
+                  <circle class="score-ring-fill" cx="36" cy="36" r="30"/>
+                </svg>
+                <div class="score-ring-label">
+                  <div class="score-ring-num">79</div>
+                  <div class="score-ring-txt">/100</div>
+                </div>
+              </div>
+              <div class="score-breakdown">
+                <div class="breakdown-item">
+                  <span class="breakdown-label">Reputation</span>
+                  <span class="breakdown-val">88</span>
+                </div>
+                <div class="breakdown-bar"><div class="breakdown-fill fill-green" style="width:88%"></div></div>
+                <div class="breakdown-item">
+                  <span class="breakdown-label">Engagement</span>
+                  <span class="breakdown-val">75</span>
+                </div>
+                <div class="breakdown-bar"><div class="breakdown-fill fill-blue" style="width:75%"></div></div>
+                <div class="breakdown-item">
+                  <span class="breakdown-label">Visibility</span>
+                  <span class="breakdown-val">62</span>
+                </div>
+                <div class="breakdown-bar"><div class="breakdown-fill fill-yellow" style="width:62%"></div></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- RECENT ACTIVITY -->
+          <div class="panel">
+            <div class="panel-header">
+              <div class="panel-title">Recent Activity</div>
+              <div class="panel-link" onclick="showTooltip(this, 'Full activity log coming soon')">All →</div>
+            </div>
+            <div class="activity-item">
+              <div class="activity-dot" style="background:#34d399;box-shadow:0 0 6px rgba(52,211,153,0.5)"></div>
+              <div>
+                <div class="activity-text"><strong>ReplyAI</strong> replied to 3 new Google reviews</div>
+                <div class="activity-time">2 hours ago</div>
+              </div>
+            </div>
+
+            <div class="activity-item">
+              <div class="activity-dot" style="background:#fbbf24;box-shadow:0 0 6px rgba(251,191,36,0.4)"></div>
+              <div>
+                <div class="activity-text"><strong>ReplyAI</strong> flagged a 1-star review for manual reply</div>
+                <div class="activity-time">2 days ago</div>
+              </div>
+            </div>
+            <div class="activity-item">
+              <div class="activity-dot" style="background:var(--blue);box-shadow:0 0 6px var(--blue-glow)"></div>
+              <div>
+                <div class="activity-text">You joined <strong>Synex Business</strong> · Welcome 🎉</div>
+                <div class="activity-time">4 days ago</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </main>
+
+    <!-- SETTINGS VIEW -->
+    <div id="view-settings" style="display:none;flex:1;overflow-y:auto;padding:32px 36px;background:var(--black);flex-direction:column;">
+      <div style="max-width:600px;">
+        <h2 style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800;letter-spacing:-0.5px;margin-bottom:4px;">Settings</h2>
+        <p style="font-size:13px;color:var(--white-muted);margin-bottom:32px;">Manage your profile and account preferences.</p>
+        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:18px;padding:28px;margin-bottom:20px;box-shadow:6px 6px 20px #000,inset 0 1px 0 rgba(255,255,255,0.04);">
+          <div style="font-family:'Syne',sans-serif;font-size:15px;font-weight:700;margin-bottom:20px;">Profile</div>
+          <div style="margin-bottom:16px;">
+            <label style="font-size:12px;color:var(--white-muted);font-weight:600;text-transform:uppercase;letter-spacing:0.8px;display:block;margin-bottom:8px;">Display Name</label>
+            <input id="settings-name" type="text" placeholder="Your name" style="width:100%;padding:12px 16px;border-radius:11px;background:var(--surface);color:white;border:1px solid var(--border);box-shadow:inset 3px 3px 8px #000;font-family:'DM Sans',sans-serif;font-size:14px;outline:none;transition:border-color 0.2s;" onfocus="this.style.borderColor='rgba(59,130,246,0.5)'" onblur="this.style.borderColor='rgba(255,255,255,0.06)'" />
+          </div>
+          <div style="margin-bottom:20px;">
+            <label style="font-size:12px;color:var(--white-muted);font-weight:600;text-transform:uppercase;letter-spacing:0.8px;display:block;margin-bottom:8px;">Email</label>
+            <input id="settings-email" type="email" disabled style="width:100%;padding:12px 16px;border-radius:11px;background:var(--surface3);color:rgba(255,255,255,0.4);border:1px solid var(--border);font-family:'DM Sans',sans-serif;font-size:14px;outline:none;cursor:not-allowed;" />
+          </div>
+          <button onclick="saveProfile()" style="padding:11px 24px;border-radius:11px;border:none;background:var(--blue);color:white;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;box-shadow:0 0 20px rgba(59,130,246,0.3);transition:all 0.2s;" onmouseover="this.style.background='#60A5FA'" onmouseout="this.style.background='#3B82F6'">Save Changes</button>
+          <span id="settings-save-msg" style="display:none;margin-left:14px;font-size:13px;color:#34d399;"></span>
+        </div>
+        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:18px;padding:28px;margin-bottom:20px;box-shadow:6px 6px 20px #000,inset 0 1px 0 rgba(255,255,255,0.04);">
+          <div style="font-family:'Syne',sans-serif;font-size:15px;font-weight:700;margin-bottom:20px;">Change Password</div>
+          <div style="margin-bottom:16px;">
+            <label style="font-size:12px;color:var(--white-muted);font-weight:600;text-transform:uppercase;letter-spacing:0.8px;display:block;margin-bottom:8px;">New Password</label>
+            <input id="settings-password" type="password" placeholder="Min. 6 characters" style="width:100%;padding:12px 16px;border-radius:11px;background:var(--surface);color:white;border:1px solid var(--border);box-shadow:inset 3px 3px 8px #000;font-family:'DM Sans',sans-serif;font-size:14px;outline:none;transition:border-color 0.2s;" onfocus="this.style.borderColor='rgba(59,130,246,0.5)'" onblur="this.style.borderColor='rgba(255,255,255,0.06)'" />
+          </div>
+          <div style="margin-bottom:20px;">
+            <label style="font-size:12px;color:var(--white-muted);font-weight:600;text-transform:uppercase;letter-spacing:0.8px;display:block;margin-bottom:8px;">Confirm New Password</label>
+            <input id="settings-password2" type="password" placeholder="Repeat new password" style="width:100%;padding:12px 16px;border-radius:11px;background:var(--surface);color:white;border:1px solid var(--border);box-shadow:inset 3px 3px 8px #000;font-family:'DM Sans',sans-serif;font-size:14px;outline:none;transition:border-color 0.2s;" onfocus="this.style.borderColor='rgba(59,130,246,0.5)'" onblur="this.style.borderColor='rgba(255,255,255,0.06)'" />
+          </div>
+          <button onclick="changePassword()" style="padding:11px 24px;border-radius:11px;border:none;background:var(--blue);color:white;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;box-shadow:0 0 20px rgba(59,130,246,0.3);transition:all 0.2s;" onmouseover="this.style.background='#60A5FA'" onmouseout="this.style.background='#3B82F6'">Update Password</button>
+          <span id="settings-pw-msg" style="display:none;margin-left:14px;font-size:13px;"></span>
+        </div>
+        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:18px;padding:28px;margin-bottom:20px;box-shadow:6px 6px 20px #000,inset 0 1px 0 rgba(255,255,255,0.04);">
+          <div style="font-family:'Syne',sans-serif;font-size:15px;font-weight:700;margin-bottom:6px;">Plan</div>
+          <p style="font-size:13px;color:var(--white-muted);margin-bottom:16px;">You are on the <strong style="color:white;" id="settings-plan-label">Free</strong> plan.</p>
+          <div style="padding:14px 18px;border-radius:11px;background:rgba(59,130,246,0.06);border:1px solid rgba(59,130,246,0.2);font-size:13px;color:var(--white-muted);">Paid plans coming soon. You will be notified when they launch.</div>
+        </div>
+        <div style="background:var(--surface2);border:1px solid rgba(239,68,68,0.2);border-radius:18px;padding:28px;box-shadow:6px 6px 20px #000;">
+          <div style="font-family:'Syne',sans-serif;font-size:15px;font-weight:700;margin-bottom:6px;color:#f87171;">Danger Zone</div>
+          <p style="font-size:13px;color:var(--white-muted);margin-bottom:16px;">Sign out of your account on this device.</p>
+          <button onclick="signOut()" style="padding:11px 24px;border-radius:11px;border:1px solid rgba(239,68,68,0.3);background:rgba(239,68,68,0.08);color:#f87171;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.background='rgba(239,68,68,0.15)'" onmouseout="this.style.background='rgba(239,68,68,0.08)'">Sign Out</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MY TOOLS VIEW -->
+    <div id="view-mytools" style="display:none;flex:1;overflow-y:auto;padding:32px 36px;background:var(--black);flex-direction:column;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:32px;">
+        <div>
+          <h2 style="font-family:'Syne',sans-serif;font-size:22px;font-weight:800;letter-spacing:-0.5px;margin-bottom:4px;">My Tools</h2>
+          <p style="font-size:13px;color:var(--white-muted);">Your active Synex tools.</p>
+        </div>
+        <button onclick="showView('overview')" style="padding:10px 20px;border-radius:11px;border:none;background:var(--blue);color:white;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;box-shadow:0 0 20px rgba(59,130,246,0.3);transition:all 0.2s;" onmouseover="this.style.background='#60A5FA'" onmouseout="this.style.background='#3B82F6'">+ Add Tool</button>
+      </div>
+      <div id="mytools-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;"></div>
+    </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- AUTH MODAL -->
+<div id="auth-modal" style="display:none; position:fixed; inset:0; z-index:999; align-items:center; justify-content:center;">
+  <div id="auth-backdrop" onclick="closeAuth()" style="position:absolute; inset:0; background:rgba(0,0,0,0.85); backdrop-filter:blur(8px);"></div>
+  <div style="position:relative; z-index:1; width:100%; max-width:420px; margin:20px;
+    background:#0e0e0e;
+    border-radius:24px;
+    border:1px solid rgba(255,255,255,0.08);
+    box-shadow: 10px 10px 40px #000, -2px -2px 10px rgba(255,255,255,0.03), 0 0 60px rgba(59,130,246,0.08);
+    padding:40px 36px;">
+
+    <!-- Close -->
+    <button onclick="closeAuth()" style="position:absolute; top:16px; right:16px; background:none; border:none; color:rgba(255,255,255,0.4); font-size:20px; cursor:pointer; line-height:1;">×</button>
+
+    <!-- Logo -->
+    <div style="font-family:'Syne',sans-serif; font-weight:800; font-size:22px; margin-bottom:6px;">
+      Syne<span style="color:#3B82F6;">x</span>
+    </div>
+
+    <!-- Tabs -->
+    <div style="display:flex; gap:0; margin-bottom:28px; margin-top:20px;
+      background:#0a0a0a; border-radius:10px; padding:4px;
+      box-shadow:inset 3px 3px 8px #000, inset -1px -1px 4px rgba(255,255,255,0.02);
+      border:1px solid rgba(255,255,255,0.05);">
+      <button id="tab-signin" onclick="switchTab('signin')" style="flex:1; padding:9px; border-radius:7px; border:none; cursor:pointer; font-family:'DM Sans',sans-serif; font-size:13px; font-weight:600; transition:all 0.2s;
+        background:#3B82F6; color:white;
+        box-shadow:0 0 16px rgba(59,130,246,0.4);">Sign In</button>
+      <button id="tab-signup" onclick="switchTab('signup')" style="flex:1; padding:9px; border-radius:7px; border:none; cursor:pointer; font-family:'DM Sans',sans-serif; font-size:13px; font-weight:600; transition:all 0.2s;
+        background:transparent; color:rgba(255,255,255,0.4);">Sign Up</button>
+    </div>
+
+    <!-- Google Button -->
+    <button onclick="signInWithGoogle()" style="width:100%; padding:13px; border-radius:12px; cursor:pointer; font-family:'DM Sans',sans-serif; font-size:14px; font-weight:600; transition:all 0.2s; display:flex; align-items:center; justify-content:center; gap:10px; margin-bottom:20px;
+      background:#111; color:white;
+      border:1px solid rgba(255,255,255,0.1);
+      box-shadow:4px 4px 14px #000, -1px -1px 4px rgba(255,255,255,0.03);"
+      onmouseover="this.style.borderColor='rgba(59,130,246,0.4)'"
+      onmouseout="this.style.borderColor='rgba(255,255,255,0.1)'">
+      <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.874 2.684-6.615z"/><path fill="#34A853" d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.258c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z"/><path fill="#FBBC05" d="M3.964 10.707A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.707V4.961H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.039l3.007-2.332z"/><path fill="#EA4335" d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.961L3.964 6.293C4.672 4.166 6.656 3.58 9 3.58z"/></svg>
+      Continue with Google
+    </button>
+
+    <!-- Divider -->
+    <div style="display:flex; align-items:center; gap:12px; margin-bottom:20px;">
+      <div style="flex:1; height:1px; background:rgba(255,255,255,0.06);"></div>
+      <span style="font-size:12px; color:rgba(255,255,255,0.3);">or</span>
+      <div style="flex:1; height:1px; background:rgba(255,255,255,0.06);"></div>
+    </div>
+
+    <!-- Form -->
+    <div id="auth-form">
+      <div id="signup-name-field" style="display:none; margin-bottom:14px;">
+        <input id="input-name" type="text" placeholder="Your name" style="width:100%; padding:13px 16px; border-radius:12px; font-family:'DM Sans',sans-serif; font-size:14px; outline:none; transition:all 0.2s;
+          background:#0a0a0a; color:white; border:1px solid rgba(255,255,255,0.08);
+          box-shadow:inset 3px 3px 8px #000, inset -1px -1px 4px rgba(255,255,255,0.02);"
+          onfocus="this.style.borderColor='rgba(59,130,246,0.5)'"
+          onblur="this.style.borderColor='rgba(255,255,255,0.08)'">
+      </div>
+      <div style="margin-bottom:14px;">
+        <input id="input-email" type="email" placeholder="Email address" style="width:100%; padding:13px 16px; border-radius:12px; font-family:'DM Sans',sans-serif; font-size:14px; outline:none; transition:all 0.2s;
+          background:#0a0a0a; color:white; border:1px solid rgba(255,255,255,0.08);
+          box-shadow:inset 3px 3px 8px #000, inset -1px -1px 4px rgba(255,255,255,0.02);"
+          onfocus="this.style.borderColor='rgba(59,130,246,0.5)'"
+          onblur="this.style.borderColor='rgba(255,255,255,0.08)'">
+      </div>
+      <div style="margin-bottom:8px;">
+        <input id="input-password" type="password" placeholder="Password" style="width:100%; padding:13px 16px; border-radius:12px; font-family:'DM Sans',sans-serif; font-size:14px; outline:none; transition:all 0.2s;
+          background:#0a0a0a; color:white; border:1px solid rgba(255,255,255,0.08);
+          box-shadow:inset 3px 3px 8px #000, inset -1px -1px 4px rgba(255,255,255,0.02);"
+          onfocus="this.style.borderColor='rgba(59,130,246,0.5)'"
+          onblur="this.style.borderColor='rgba(255,255,255,0.08)'">
+      </div>
+      <div style="text-align:right;margin-bottom:18px;">
+        <span id="forgot-pw-link" onclick="forgotPassword()" style="font-size:12px;color:var(--blue-bright);cursor:pointer;font-weight:500;">Forgot password?</span>
+      </div>
+
+      <!-- Error / Success message -->
+      <div id="auth-message" style="display:none; padding:11px 14px; border-radius:10px; font-size:13px; margin-bottom:16px; font-weight:500;"></div>
+
+      <!-- Submit -->
+      <button id="auth-submit" onclick="handleAuth()" style="width:100%; padding:14px; border-radius:12px; border:none; cursor:pointer; font-family:'DM Sans',sans-serif; font-size:15px; font-weight:700; transition:all 0.2s;
+        background:#3B82F6; color:white;
+        box-shadow:0 0 30px rgba(59,130,246,0.4), 0 6px 20px rgba(0,0,0,0.4);"
+        onmouseover="this.style.background='#60A5FA'"
+        onmouseout="this.style.background='#3B82F6'">
+        Sign In
+      </button>
+    </div>
+
+    <p id="auth-switch-text" style="text-align:center; margin-top:18px; font-size:13px; color:rgba(255,255,255,0.4);">
+      Don't have an account? <span onclick="switchTab('signup')" style="color:#60A5FA; cursor:pointer; font-weight:600;">Sign up free</span>
+    </p>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+
+// ── SUPABASE INIT ──────────────────────────────────────────
+const { createClient } = supabase
+const sb = createClient(
+  'https://rlinpjipyumrlswxesfm.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJsaW5wamlweXVtcmxzd3hlc2ZtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE2ODk5NzMsImV4cCI6MjA4NzI2NTk3M30.IlX64ti-xeBdxsExXv0IZ0BFB6kNDt87HnvKdZqOXmo',
+  {
+    auth: {
+      flowType: 'pkce',
+      detectSessionInUrl: true,
+      persistSession: true
+    }
+  }
+)
+
+// ── GOOGLE LINKED EMAILS ───────────────────────────────────
+const googleLinkedEmails = new Set(
+  JSON.parse(localStorage.getItem('synex_google_emails') || '[]')
+)
+
+// ── AUTH STATE HANDLER ─────────────────────────────────────
+let sessionChecked = false
+
+function handleSession(session) {
+  if (session && session.user) {
+    const identities = session.user.identities || []
+    const isGoogle = identities.some(i => i.provider === 'google')
+    if (isGoogle && session.user.email) {
+      googleLinkedEmails.add(session.user.email.toLowerCase())
+      localStorage.setItem('synex_google_emails', JSON.stringify([...googleLinkedEmails]))
+    }
+    closeAuth()
+    loadDashboard(session.user)
+  } else if (sessionChecked) {
+    showLanding()
+  }
+}
+
+// Ongoing listener — handles ALL auth events including email sign in
+sb.auth.onAuthStateChange((event, session) => {
+  if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED' || event === 'USER_UPDATED') {
+    handleSession(session)
+  } else if (event === 'SIGNED_OUT') {
+    showLanding()
+  }
+})
+
+// Initial check — handles page load and Google OAuth redirect
+sb.auth.getSession().then(({ data: { session } }) => {
+  sessionChecked = true
+  if (!session) showLanding()
+  else handleSession(session)
+})
+
+// ── PAGE MANAGEMENT ────────────────────────────────────────
+function showLanding() {
+  document.getElementById('landing').classList.add('active')
+  document.getElementById('dashboard').classList.remove('active')
+  window.scrollTo(0, 0)
+}
+
+async function loadDashboard(user) {
+  document.getElementById('landing').classList.remove('active')
+  document.getElementById('dashboard').classList.add('active')
+  window.scrollTo(0, 0)
+  showView('overview')
+
+  const avatarEl = document.getElementById('dash-avatar')
+  const nameEl   = document.getElementById('dash-username')
+  const planEl   = document.getElementById('dash-plan')
+
+  let name     = user.user_metadata?.full_name || user.email?.split('@')[0] || 'there'
+  let initials = name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2)
+  let firstName = name.split(' ')[0]
+  if (avatarEl) avatarEl.textContent = initials
+  if (nameEl)   nameEl.textContent   = name
+  updateDateGreeting(firstName)
+
+  try {
+    const { data: profile } = await sb.from('profiles')
+      .select('display_name, plan, role, active_tools, created_at')
+      .eq('id', user.id).single()
+    if (profile) {
+      if (profile.display_name) {
+        name      = profile.display_name
+        initials  = name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2)
+        firstName = name.split(' ')[0]
+        if (avatarEl) avatarEl.textContent = initials
+        if (nameEl)   nameEl.textContent   = name
+        updateDateGreeting(firstName)
+      }
+      if (planEl) {
+        const pl        = profile.plan || 'free'
+        const planLabel = pl.charAt(0).toUpperCase() + pl.slice(1)
+        const roleLabel = profile.role === 'owner' ? 'Owner' : 'Business'
+        planEl.textContent = planLabel + ' · ' + roleLabel
+      }
+      const tools = (profile.active_tools && profile.active_tools.length)
+        ? profile.active_tools : ['ReplyAI']
+      updateToolsCount(tools.length)
+      renderActiveToolsPanel(tools)
+      renderActivityFeed(profile.created_at)
+    }
+  } catch(e) {
+    if (planEl) planEl.textContent = 'Free · Business'
+  }
+}
+
+function renderActiveToolsPanel(tools) {
+  const container = document.querySelector('#active-tools-panel .active-tools')
+  if (!container) return
+  if (!tools.length) {
+    container.innerHTML = '<div style="color:var(--white-muted);font-size:13px;padding:12px 0;grid-column:1/-1;">No tools active. <span onclick="showView('mytools')" style="color:var(--blue-bright);cursor:pointer;">Add one</span></div>'
+    return
+  }
+  const META = {
+    ReplyAI:  { icon: '⭐', meta: 'Reply to reviews with AI' },
+    
+  }
+  container.innerHTML = tools.map(t => {
+    const m = META[t] || { icon: '🔧', meta: t }
+    return '<div class="active-tool-card" onclick="showView(\'mytools\')" style="cursor:pointer;">'
+      + '<div class="atc-icon">' + m.icon + '</div>'
+      + '<div class="atc-name">' + t.replace('AI', '<span>AI</span>') + '</div>'
+      + '<div class="atc-meta">' + m.meta + '</div>'
+      + '<div class="atc-usage"><div class="atc-usage-fill" style="width:40%;"></div></div>'
+      + '</div>'
+  }).join('')
+}
+
+function renderActivityFeed(createdAt) {
+  const items = document.querySelectorAll('.activity-item')
+  if (!items.length || !createdAt) return
+  const now    = new Date()
+  const joined = new Date(createdAt)
+  const diff   = Math.floor((now - joined) / 86400000)
+  const label  = diff === 0 ? 'Today' : diff === 1 ? 'Yesterday' : diff + ' days ago'
+  const last   = items[items.length - 1]
+  const timeEl = last.querySelector('.activity-time')
+  if (timeEl) timeEl.textContent = label
+}
+
+// ── AUTH MODAL ─────────────────────────────────────────────
+let currentTab = 'signin'
+
+function openAuth(tab = 'signin') {
+  switchTab(tab)
+  const modal = document.getElementById('auth-modal')
+  modal.style.display = 'flex'
+  setTimeout(() => modal.style.opacity = '1', 10)
+}
+
+function closeAuth() {
+  document.getElementById('auth-modal').style.display = 'none'
+  clearMessage()
+}
+
+function switchTab(tab) {
+  currentTab = tab
+  const nameField = document.getElementById('signup-name-field')
+  const submitBtn = document.getElementById('auth-submit')
+  const switchText = document.getElementById('auth-switch-text')
+  const tabSignin = document.getElementById('tab-signin')
+  const tabSignup = document.getElementById('tab-signup')
+
+  const activeStyle = 'background:#3B82F6; color:white; box-shadow:0 0 16px rgba(59,130,246,0.4);'
+  const inactiveStyle = 'background:transparent; color:rgba(255,255,255,0.4); box-shadow:none;'
+
+  if (tab === 'signup') {
+    nameField.style.display = 'block'
+    submitBtn.textContent = 'Create Account'
+    switchText.innerHTML = "Already have an account? <span onclick=\"switchTab('signin')\" style=\"color:#60A5FA;cursor:pointer;font-weight:600;\">Sign in</span>"
+    tabSignup.style.cssText += activeStyle
+    tabSignin.style.cssText += inactiveStyle
+  } else {
+    nameField.style.display = 'none'
+    submitBtn.textContent = 'Sign In'
+    switchText.innerHTML = "Don't have an account? <span onclick=\"switchTab('signup')\" style=\"color:#60A5FA;cursor:pointer;font-weight:600;\">Sign up free</span>"
+    tabSignin.style.cssText += activeStyle
+    tabSignup.style.cssText += inactiveStyle
+  }
+  clearMessage()
+}
+
+// ── HANDLE EMAIL AUTH ──────────────────────────────────────
+async function handleAuth() {
+  const email = document.getElementById('input-email').value.trim()
+  const password = document.getElementById('input-password').value
+  const name = document.getElementById('input-name').value.trim()
+  const btn = document.getElementById('auth-submit')
+
+  if (!email || !password) { showMessage('Please fill in all fields.', 'error'); return }
+
+  btn.textContent = 'Please wait...'
+  btn.style.opacity = '0.7'
+  btn.disabled = true
+
+  const googleLinked = await isGoogleAccount(email)
+  if (googleLinked) {
+    showGoogleLinkedError()
+    btn.textContent = currentTab === 'signup' ? 'Create Account' : 'Sign In'
+    btn.style.opacity = '1'
+    btn.disabled = false
+    return
+  }
+
+  if (currentTab === 'signup') {
+    const { data, error } = await sb.auth.signUp({
+      email, password,
+      options: { data: { full_name: name || email.split('@')[0] } }
+    })
+    if (error) {
+      showMessage(error.message, 'error')
+    } else if (data.user && !data.session) {
+      showMessage('Check your email to confirm your account, then sign in.', 'success')
+    }
+  } else {
+    const { data, error } = await sb.auth.signInWithPassword({ email, password })
+    if (error) {
+      if (error.message.toLowerCase().includes('invalid login') || error.message.toLowerCase().includes('provider')) {
+        showGoogleLinkedError()
+      } else {
+        showMessage(error.message, 'error')
+      }
+    }
+  }
+
+  btn.textContent = currentTab === 'signup' ? 'Create Account' : 'Sign In'
+  btn.style.opacity = '1'
+  btn.disabled = false
+}
+
+// ── GOOGLE ACCOUNT DETECTION ───────────────────────────────
+async function isGoogleAccount(email) {
+  return googleLinkedEmails.has(email.toLowerCase())
+}
+
+function showGoogleLinkedError() {
+  const emailInput = document.getElementById('input-email')
+  emailInput.style.borderColor = 'rgba(239,68,68,0.6)'
+  emailInput.style.boxShadow = 'inset 3px 3px 8px #000, 0 0 0 2px rgba(239,68,68,0.15)'
+
+  const msg = document.getElementById('auth-message')
+  msg.style.display = 'flex'
+  msg.style.alignItems = 'center'
+  msg.style.gap = '10px'
+  msg.style.background = 'rgba(239,68,68,0.1)'
+  msg.style.color = '#f87171'
+  msg.style.border = '1px solid rgba(239,68,68,0.3)'
+  msg.style.padding = '11px 14px'
+  msg.style.borderRadius = '10px'
+  msg.style.fontSize = '13px'
+  msg.style.fontWeight = '500'
+  msg.style.marginBottom = '16px'
+  msg.innerHTML = '<span>This email is linked to a Google account. <span onclick="signInWithGoogle()" style="color:#60A5FA;cursor:pointer;text-decoration:underline;font-weight:600;">Sign in with Google</span></span>'
+
+  emailInput.addEventListener('input', () => {
+    emailInput.style.borderColor = 'rgba(255,255,255,0.08)'
+    emailInput.style.boxShadow = 'inset 3px 3px 8px #000, inset -1px -1px 4px rgba(255,255,255,0.02)'
+    clearMessage()
+  }, { once: true })
+}
+
+// ── GOOGLE SIGN IN ─────────────────────────────────────────
+async function signInWithGoogle() {
+  const redirectTo = window.location.origin + window.location.pathname
+  const { error } = await sb.auth.signInWithOAuth({
+    provider: 'google',
+    options: {
+      redirectTo: redirectTo,
+      queryParams: { access_type: 'offline', prompt: 'consent' }
+    }
+  })
+  if (error) showMessage(error.message, 'error')
+}
+
+// ── SIGN OUT ───────────────────────────────────────────────
+async function signOut() {
+  await sb.auth.signOut()
+  showLanding()
+}
+
+// ── MESSAGE HELPER ─────────────────────────────────────────
+function showMessage(msg, type) {
+  const el = document.getElementById('auth-message')
+  el.style.display = 'block'
+  el.textContent = msg
+  if (type === 'error') {
+    el.style.background = 'rgba(239,68,68,0.15)'
+    el.style.color = '#f87171'
+    el.style.border = '1px solid rgba(239,68,68,0.3)'
+  } else {
+    el.style.background = 'rgba(16,185,129,0.15)'
+    el.style.color = '#34d399'
+    el.style.border = '1px solid rgba(16,185,129,0.3)'
+  }
+}
+
+function clearMessage() {
+  const el = document.getElementById('auth-message')
+  el.style.display = 'none'
+  el.textContent = ''
+}
+
+// ── ENTER KEY SUPPORT ──────────────────────────────────────
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && document.getElementById('auth-modal').style.display === 'flex') {
+    handleAuth()
+  }
+  if (e.key === 'Escape') closeAuth()
+})
+
+// ── DATE & GREETING ────────────────────────────────────────
+function updateDateGreeting(firstName) {
+  const now = new Date()
+  const hour = now.getHours()
+  const greeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening'
+  const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
+  const dateStr = days[now.getDay()] + ', ' + now.getDate() + ' ' + months[now.getMonth()] + ' ' + now.getFullYear()
+  const greetEl = document.getElementById('dash-greeting')
+  const dateEl = document.getElementById('dash-date')
+  if (greetEl) greetEl.textContent = greeting + ', ' + (firstName || 'there') + ' 👋'
+  if (dateEl) dateEl.textContent = "Here's your Synex overview for today — " + dateStr
+}
+
+// ── SIDEBAR ACTIVE STATE ───────────────────────────────────
+function setSidebarActive(el) {
+  document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'))
+  el.classList.add('active')
+}
+
+// ── SCROLL TO PANEL ────────────────────────────────────────
+function scrollToDiscover() {})
+}
+
+function scrollToPanel(id) {
+  const el = document.getElementById(id)
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' })
+}
+
+// ── TOOLTIP ────────────────────────────────────────────────
+function showTooltip(el, msg) {
+  const existing = el.querySelector('.synex-tooltip')
+  if (existing) { existing.remove(); return }
+  const tip = document.createElement('span')
+  tip.className = 'synex-tooltip'
+  tip.textContent = msg
+  tip.style.cssText = 'position:absolute;background:#1a1a1a;border:1px solid rgba(255,255,255,0.1);color:rgba(255,255,255,0.7);font-size:11px;padding:5px 10px;border-radius:7px;white-space:nowrap;z-index:999;top:100%;right:0;margin-top:6px;box-shadow:4px 4px 12px #000;'
+  el.style.position = 'relative'
+  el.appendChild(tip)
+  setTimeout(() => tip.remove(), 2500)
+}
+
+// ── NOTIFICATION DROPDOWN ──────────────────────────────────
+function toggleNotifDropdown() {
+  const dd = document.getElementById('notif-dropdown')
+  if (!dd) return
+  dd.style.display = dd.style.display === 'none' ? 'block' : 'none'
+  if (dd.style.display === 'block') {
+    setTimeout(() => document.addEventListener('click', closeNotifOnOutside, { once: true }), 10)
+  }
+}
+
+function closeNotifOnOutside(e) {
+  const dd = document.getElementById('notif-dropdown')
+  const btn = document.getElementById('notif-btn')
+  if (dd && !btn.contains(e.target)) dd.style.display = 'none'
+}
+
+// ── DIGEST EXPAND / COLLAPSE ───────────────────────────────
+function toggleDigest(btn) {
+  const full = document.getElementById('digest-full')
+  const teaser = document.getElementById('digest-teaser')
+  if (!full) return
+  const isOpen = full.style.display !== 'none'
+  full.style.display = isOpen ? 'none' : 'block'
+  if (teaser) teaser.style.display = isOpen ? 'block' : 'none'
+  btn.textContent = isOpen ? 'Read Full Digest' : 'Collapse Digest'
+}
+
+// ── TOOL URL MAP ───────────────────────────────────────
+// Add each tool's external URL here as they go live
+const TOOL_URLS = {
+  ReplyAI: 'https://replyai-suite.netlify.app',
+}
+
+// ── OPEN TOOL (with JWT passthrough) ───────────────────
+async function openTool(toolName) {
+  const url = TOOL_URLS[toolName]
+  if (!url) {
+    showTooltip(event.currentTarget, toolName + ' coming soon')
+    return
+  }
+  const { data: { session } } = await sb.auth.getSession()
+  if (!session) {
+    openAuth('signin')
+    return
+  }
+  window.location.href = url + '?token=' + encodeURIComponent(session.access_token) + '&refresh=' + encodeURIComponent(session.refresh_token)
+}
+
+ } = await sb.auth.getSession()
+  if (!session) return
+  const { data: profile } = await sb.from('profiles').select('active_tools').eq('id', session.user.id).single()
+  const current = profile?.active_tools || []
+  if (!current.includes(toolName)) {
+    const updated = [...current, toolName]
+    await sb.from('profiles').update({ active_tools: updated }).eq('id', session.user.id)
+    updateToolsCount(updated.length)
+    renderActiveToolsPanel(updated)
+  }
+  btn.textContent = '✓'
+  btn.style.background = '#34d399'
+  btn.style.boxShadow = '0 0 12px rgba(52,211,153,0.4)'
+  btn.style.opacity = '1'; btn.style.cursor = 'default'
+  showTooltip(btn.parentElement.querySelector('.discover-name') || btn, toolName + ' added!')
+}
+
+function updateToolsCount(count) {
+  const cards = document.querySelectorAll('.score-card')
+  if (cards[2]) {
+    const numEl = cards[2].querySelector('.score-number')
+    const barEl = cards[2].querySelector('.score-fill')
+    if (numEl) numEl.textContent = count
+    if (barEl) barEl.style.width = Math.min(Math.round((count / 5) * 100), 100) + '%'
+  }
+}
+
+// ── VIEW SWITCHING ──────────────────────────────────────────
+function showView(view) {
+  const mainHeader  = document.querySelector('.main-header')
+  const scoreRow    = document.querySelector('.score-row')
+  const dashGrid    = document.querySelector('.dash-grid')
+  const overviewEls = [mainHeader, scoreRow, dashGrid]
+  const extraViews  = ['view-settings', 'view-mytools']
+
+  extraViews.forEach(id => { const el = document.getElementById(id); if (el) el.style.display = 'none' })
+  document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'))
+
+  if (view === 'overview') {
+    overviewEls.forEach(el => { if (el) el.style.display = '' })
+    const nav = document.getElementById('nav-overview')
+    if (nav) nav.classList.add('active')
+  } else {
+    overviewEls.forEach(el => { if (el) el.style.display = 'none' })
+    if (view === 'settings') {
+      const el = document.getElementById('view-settings'); if (el) el.style.display = 'flex'
+      const nav = document.getElementById('nav-settings');  if (nav) nav.classList.add('active')
+      populateSettings()
+    } else if (view === 'mytools') {
+      const el = document.getElementById('view-mytools'); if (el) el.style.display = 'flex'
+      const nav = document.getElementById('nav-mytools');  if (nav) nav.classList.add('active')
+      populateMyTools()
+    }
+  }
+}
+
+// ── SETTINGS ──────────────────────────────────────────────────
+async function populateSettings() {
+  const { data: { session } } = await sb.auth.getSession()
+  if (!session) return
+  const emailEl = document.getElementById('settings-email')
+  const nameEl  = document.getElementById('settings-name')
+  const planEl  = document.getElementById('settings-plan-label')
+  if (emailEl) emailEl.value = session.user.email || ''
+  const { data: profile } = await sb.from('profiles').select('display_name, plan').eq('id', session.user.id).single()
+  if (nameEl) nameEl.value = profile?.display_name || session.user.user_metadata?.full_name || ''
+  if (planEl && profile?.plan) planEl.textContent = profile.plan.charAt(0).toUpperCase() + profile.plan.slice(1)
+}
+
+async function saveProfile() {
+  const nameEl = document.getElementById('settings-name')
+  const msgEl  = document.getElementById('settings-save-msg')
+  const name   = nameEl ? nameEl.value.trim() : ''
+  if (!name) return
+  const { data: { session } } = await sb.auth.getSession()
+  if (!session) return
+  const { error } = await sb.from('profiles').update({ display_name: name }).eq('id', session.user.id)
+  await sb.auth.updateUser({ data: { full_name: name } })
+  if (msgEl) { msgEl.style.display = 'inline'; msgEl.textContent = error ? 'Error saving.' : 'Saved!' }
+  if (!error) {
+    const dispEl   = document.getElementById('dash-username')
+    const avatarEl = document.getElementById('dash-avatar')
+    if (dispEl)   dispEl.textContent   = name
+    if (avatarEl) avatarEl.textContent = name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2)
+    updateDateGreeting(name.split(' ')[0])
+  }
+  setTimeout(() => { if (msgEl) msgEl.style.display = 'none' }, 3000)
+}
+
+async function changePassword() {
+  const pw1   = document.getElementById('settings-password')?.value
+  const pw2   = document.getElementById('settings-password2')?.value
+  const msgEl = document.getElementById('settings-pw-msg')
+  if (!pw1 || pw1.length < 6) {
+    if (msgEl) { msgEl.style.display = 'inline'; msgEl.style.color = '#f87171'; msgEl.textContent = 'Min. 6 characters.' }
+    return
+  }
+  if (pw1 !== pw2) {
+    if (msgEl) { msgEl.style.display = 'inline'; msgEl.style.color = '#f87171'; msgEl.textContent = 'Passwords do not match.' }
+    return
+  }
+  const { error } = await sb.auth.updateUser({ password: pw1 })
+  if (msgEl) {
+    msgEl.style.display = 'inline'
+    msgEl.style.color   = error ? '#f87171' : '#34d399'
+    msgEl.textContent   = error ? (error.message || 'Error updating.') : 'Password updated!'
+  }
+  if (!error) {
+    const p1 = document.getElementById('settings-password'); if (p1) p1.value = ''
+    const p2 = document.getElementById('settings-password2'); if (p2) p2.value = ''
+  }
+  setTimeout(() => { if (msgEl) msgEl.style.display = 'none' }, 3500)
+}
+
+// ── FORGOT PASSWORD ────────────────────────────────────────
+async function forgotPassword() {
+  const email = document.getElementById('input-email')?.value.trim()
+  if (!email) { showMessage('Enter your email address first.', 'error'); return }
+  const { error } = await sb.auth.resetPasswordForEmail(email, {
+    redirectTo: window.location.origin + window.location.pathname
+  })
+  if (error) {
+    showMessage(error.message, 'error')
+  } else {
+    showMessage('Password reset email sent. Check your inbox.', 'success')
+    const link = document.getElementById('forgot-pw-link')
+    if (link) link.style.display = 'none'
+  }
+}
+
+// ── MY TOOLS ──────────────────────────────────────────────
+const TOOL_META_MAP = {
+  ReplyAI:  { icon: '⭐', desc: 'AI responses to your Google and Yelp reviews.', status: 'live' },
+}
+
+async function populateMyTools() {
+  const grid = document.getElementById('mytools-grid')
+  if (!grid) return
+  grid.innerHTML = '<div style="color:var(--white-muted);font-size:13px;">Loading...</div>'
+  const { data: { session } } = await sb.auth.getSession()
+  if (!session) return
+  const { data: profile } = await sb.from('profiles').select('active_tools').eq('id', session.user.id).single()
+  const tools = (profile?.active_tools && profile.active_tools.length) ? profile.active_tools : ['ReplyAI']
+  if (!tools.length) {
+    grid.innerHTML = '<div style="color:var(--white-muted);font-size:13px;padding:20px 0;">No tools yet. <span onclick="showView('mytools')" style="color:var(--blue-bright);cursor:pointer;">Browse tools →</span></div>'
+    return
+  }
+  grid.innerHTML = tools.map(t => {
+    const m  = TOOL_META_MAP[t] || { icon: '🔧', desc: t, status: 'soon' }
+    const sc = m.status === 'live' ? '#34d399' : m.status === 'wip' ? '#fbbf24' : 'var(--white-muted)'
+    const sl = m.status === 'live' ? 'Live' : m.status === 'wip' ? 'In Progress' : 'Coming Soon'
+    const hasUrl = !!TOOL_URLS[t]
+    return '<div style="background:var(--surface2);border:1px solid var(--border);border-radius:16px;padding:22px;box-shadow:5px 5px 16px #000,inset 0 1px 0 rgba(255,255,255,0.04);transition:border-color 0.25s;cursor:' + (hasUrl ? 'pointer' : 'default') + ';" onclick="openTool(\'' + t + '\')" onmouseover=\"this.style.borderColor=\'rgba(59,130,246,0.3)\'\" onmouseout=\"this.style.borderColor=\'rgba(255,255,255,0.06)\'\">'
+      + '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">'
+      + '<div style="width:38px;height:38px;border-radius:10px;background:rgba(59,130,246,0.12);border:1px solid rgba(59,130,246,0.2);display:flex;align-items:center;justify-content:center;font-size:18px;">' + m.icon + '</div>'
+      + '<span style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:' + sc + ';">' + sl + '</span>'
+      + '</div>'
+      + '<div style="font-family:\'Syne\',sans-serif;font-size:15px;font-weight:700;margin-bottom:6px;">' + t.replace('AI', '<span style=\'color:var(--blue);\'>AI</span>') + '</div>'
+      + '<div style="font-size:12px;color:var(--white-muted);line-height:1.6;">' + m.desc + '</div>'
+      + '</div>'
+  }).join('')
+}
+
+</script>
+</body>
+</html>
